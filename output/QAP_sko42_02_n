@@ -1,0 +1,28 @@
+Solution using Default PathFinder = 317303.5
+
+Execution time: 10.2s
+Solution using Heuristic 2+3 = 217059.5
+Solution from the Literature = 216120.5
+Percentual left = 0.43%
+Permutation: 14 2 15 31 13 9 4 35 39 30 21 33 23 10 16 27 19 28 20 26 36 12 40 37 38 29 5 32 3 7 18 34 42 41 17 25 6 24 22 11 1 8 
+
+Solution using MaxFlow PathFinder = 295083.500000
+Execution time: 8.265803s
+Solution using Heuristic 2+3 = 216784.500000
+Solution from the Literature = 216120.5
+Percentual left = 0.31%
+Permutation: 17 14 15 31 2 13 9 35 10 4 39 30 23 16 33 27 19 28 20 36 26 12 40 37 29 5 32 7 3 38 21 18 42 34 41 25 6 24 22 11 1 8 
+
+Solution using Relation PathFinder = 295138.500000
+Execution time: 9.733714s
+Solution using Heuristic 2+3 = 216255.500000
+Solution from the Literature = 216120.5
+Percentual left = 0.06%
+Permutation: 17 14 15 31 2 13 9 35 10 4 42 32 18 19 28 26 20 27 33 12 39 40 30 29 37 5 36 16 23 38 3 7 34 21 41 25 6 24 22 11 1 8 
+
+Solution using MaxFlow Relation PathFinder = 304291.500000
+Execution time: 8.680731s
+Solution using Heuristic 2+3 = 216742.500000
+Solution from the Literature = 216120.5
+Percentual left = 0.29%
+Permutation: 17 14 15 31 9 13 35 4 10 42 34 41 32 12 7 20 16 19 27 33 40 29 26 5 21 38 37 39 30 28 36 3 23 2 18 25 6 24 22 11 1 8 
