@@ -398,4 +398,8 @@ float heuristic3(int size, int pos[][size], int flow[][size],float value[][2],fl
     return ps;
 }
  
+float geneticAlgorithm(){
+	//begin basic programming and block dividing
+}
+ 
 #endif

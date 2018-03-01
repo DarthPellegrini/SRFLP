@@ -368,6 +368,7 @@ void findPathRelationFlow(int size, int pos[][size], int flow[][size]){
 	}
 	//create new way of saving using multiple solutions
 	
+	
 	//## SAVING TO POS ##
 	temp = 1; p1 = 1; p2 = size-1;
 	while(gs != (g *) NULL){
