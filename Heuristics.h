@@ -400,6 +400,19 @@ float heuristic3(int size, int pos[][size], int flow[][size],float value[][2],fl
  
 float geneticAlgorithm(){
 	//begin basic programming and block dividing
+	//## STARTING THE POPULATION ##
+	
+	//## MATING POOL ##
+	
+	//## SELECTING BEST-FIT ##
+	
+	//## BREEDING THROUGH CROSSOVER AND MUTATION##
+	
+	//## EVALUATING THE CHILDREN'S FITNESS ##
+	
+	//## REPLACING LEAST-FIT WITH THE CHILDREN ##
+	
+	//## SAVING THE BEST-FIT INDIVIDUAL ##
 }
  
 #endif
