@@ -59,10 +59,79 @@
 */
 
 /*
-*	DATA SAVING FUNCTION
+*	EXECUTION AND SAVING FUNCTION
 */
-void savingData(){
-	//create generic function
+void execution(int size, int pos[][size], int flow[][size], float value[][2], void (*pathfinder)(int,int[][size],int[][size]), int IS, double res, char ldata[], FILE *log){
+	/*
+	 * VARIABLES:
+	 * explain this later on
+	 *
+	 *
+	 */
+	log = fopen(ldata,"rb+");
+	if (log == NULL){
+		log = fopen(ldata,"wb+");
+			if(log == NULL){
+				puts("erro");
+				exit(1);
+			}
+	}
+	clock_t begin,end; char s[4][25], fdata[256];
+	double perc; float last; int temp;
+	strcpy(s[0],"Default");
+	strcpy(s[1],"MaxFlow");
+	strcpy(s[2],"Relation");
+	strcpy(s[3],"MaxFlow Relation");
+	
+	
+	//## SHOWING THE INITIAL SOLUTION ##
+	pathfinder(size,pos,flow);
+	last = objectiveFunction(size,pos[0],flow,value);
+	printf("\nSolution using %s PathFinder = %.1f\n",s[IS],last);
+	fputs("Solution using ",log);
+	fputs(s[IS] ,log); fputs(" PathFinder = ",log);
+	snprintf(fdata, 50, "%.1f", last);
+	fputs(fdata,log); fputs("\n\n",log);
+	
+	//## EXECUTING THE ALGORITHM ##
+	begin = clock();
+	pathfinder(size,pos,flow);
+	last = objectiveFunction(size,pos[0],flow,value);
+	last = hRecursion(size,pos,flow,value,last);
+	end = clock();
+	
+	//## EXECUTION DATA ##
+	printf("Execution time %.6fs\n",((double)(end - begin))/1000000);
+	snprintf(fdata, 30, "%.1f",((double)(end - begin))/1000000);
+	fputs("Execution time: ",log);
+	fputs(fdata,log); fputs("s\n",log);
+	printf("Solution using Heuristic 2+3 = %.1f\n",last);
+	fputs("Solution using Heuristic 2+3 = ",log);
+	snprintf(fdata, 50, "%.1f", last);	fputs(fdata,log); 
+	printf("Solution from the Literature = %.1f\n",res);
+	fputs("\nSolution from the Literature = ",log);
+	snprintf(fdata, 50, "%.1f", res);
+	fputs(fdata,log); perc = ((last-res)*100/last);
+	if(perc != 0){
+		printf("Percentual left = %.2f%%\n",perc);
+		fputs("\nPercentual left = ",log);
+		snprintf(fdata, 50, "%.2f", perc);
+		fputs(fdata,log); fputs("%",log);
+	}else{
+		printf("Literature solution reached!\n");
+		fputs("Literature solution reached!",log);
+	}
+	
+	//## CURRENT PERMUTATION ##
+	printf("Permutation: ");
+	fputs("\nPermutation: ",log);
+	for(temp = 1; temp < size; temp++){
+	    printf("%d ",pos[0][temp]);
+	    snprintf(fdata, 50, "%d", pos[0][temp]);
+	    fputs(fdata,log); fputs(" ",log);
+	}
+	puts(""); fputs("\n\n",log);
+	fclose(log);
 }
 
 /*
@@ -77,6 +146,7 @@ void main(int argc, char *argv[]){
      *  p: file data pointer
      *  last: last solution found
      *  size: size of the facility (+1 for easy calculations)
+     *	solsize: quantity of solutions (must be quantity+1, position 0 is used to store the best solution)
      *  i & j: loop controlling
      *  value: value of each facility and half of his value
      *  Flow[][] configurations is as follows:
@@ -85,16 +155,15 @@ void main(int argc, char *argv[]){
      *  Flow[0][0]: counter of facilities for group assembly (index)
      */
     FILE *arq,*log,*data,*lit;
-    clock_t begin,end;
-    char fdata[256],idata[256];
-    // ### READING DATA ###
+    char fdata[256],idata[256],ldata[256];
     data = fopen("data.dat","r");
     if(data == NULL){
 	    puts("Erro - arquivo de dados nao existe");
 	    exit(1);
 	}
     while (fgets(idata, sizeof(idata),data) != NULL){
-		int size,i=1,j=1,gsize=2,temp;
+    	// ### READING DATA ###
+		int size,solsize=21,i=1,j=1,temp;
 		char *p;
     	idata[strlen(idata)-1] = '\0';
     	arq = fopen(idata,"rb");
@@ -103,16 +172,15 @@ void main(int argc, char *argv[]){
 		    exit(1);
 		}
 		printf("\nInstance: %s\n",idata);
-		fgets(idata, sizeof(idata),data);
-		idata[strlen(idata)-1] = '\0';
-		log = fopen(idata,"wb+");
+		fgets(ldata, sizeof(ldata),data);
+		ldata[strlen(ldata)-1] = '\0';
 		//saves the size of the Facility
 		fgets(fdata,1024,arq);
 		size = (1+atoi(fdata));
 		//flow matrix and positioning declarations
-		int flow[size][size],pos[size],aux[size];
+		int flow[size][size],pos[size][solsize],aux[size];
 		float value[size][2],last;
-		double res,perc;
+		double res;
 		//saving positioning
 		fgets(fdata,1024,arq);
 		p = fdata;
@@ -123,7 +191,7 @@ void main(int argc, char *argv[]){
 		//printf("Literature result = %.1f\n",res);
 		//converting from char array to int
 		while(i < size){
-		    pos[i] = 0;
+		    pos[i][0] = 0;
 		    flow[i][0] = 0;
 			flow[0][i] = -1;
 		    value[i][0] = strtol(p,&p,10);
@@ -145,184 +213,10 @@ void main(int argc, char *argv[]){
 		}
 		fclose(arq);
 		// ### HEURISTICS AND POSITIONING LOGIC ###
-		findPath(size,pos,flow,gsize);
-		last = objectiveFunction(size,pos,flow,value);
-		printf("\nSolution using Default PathFinder = %.1f\n",last);
-		fputs("Solution using Default PathFinder = ",log);
-		snprintf(fdata, 50, "%.1f", last);
-		fputs(fdata,log); fputs("\n\n",log);
-	
-		begin = clock();
-		findPath(size,pos,flow,gsize);
-		last = objectiveFunction(size,pos,flow,value);
-		last = hRecursion(size,pos,flow,value,last);
-		end = clock();
-		printf("Execution time %.6fs\n",((double)(end - begin))/1000000);
-		snprintf(fdata, 30, "%.1f",((double)(end - begin))/1000000);
-		fputs("Execution time: ",log);
-		fputs(fdata,log); fputs("s\n",log);
-		printf("Solution using Heuristic 2+3 = %.1f\n",last);
-		fputs("Solution using Heuristic 2+3 = ",log);
-		snprintf(fdata, 50, "%.1f", last);
-		fputs(fdata,log); 
-		printf("Solution from the Literature = %.1f\n",res);
-		fputs("\nSolution from the Literature = ",log);
-		snprintf(fdata, 50, "%.1f", res);
-		fputs(fdata,log); perc = ((last-res)*100/last);
-		if(perc != 0){
-			printf("Percentual left = %.2f%%\n",perc);
-			fputs("\nPercentual left = ",log);
-			snprintf(fdata, 50, "%.2f", perc);
-			fputs(fdata,log); fputs("%",log);
-		}else{
-			printf("Literature solution reached!\n");
-			fputs("Literature solution reached!",log);
-		}
-		printf("Permutation: ");
-		fputs("\nPermutation: ",log);
-		
-		
-		for(temp = 1; temp < size; temp++){
-		    printf("%d ",pos[temp]);
-		    snprintf(fdata, 50, "%d", pos[temp]);
-		    fputs(fdata,log); fputs(" ",log);
-		}
-		puts(""); fputs("\n\n",log);
-		
-
-		findPathFlow(size,pos,flow);
-		last = objectiveFunction(size,pos,flow,value); 
-		printf("\nSolution using MaxFlow PathFinder = %.1f\n",last);
-		fputs("Solution using MaxFlow PathFinder = ",log);
-		snprintf(fdata, 50, "%f", last);
-		fputs(fdata,log); fputs("\n",log);
-	
-		begin = clock();
-		findPathFlow(size,pos,flow);
-		last = objectiveFunction(size,pos,flow,value);
-		last = hRecursion(size,pos,flow,value,last);
-		end = clock();
-		printf("Execution time %.6fs\n",((double)(end - begin))/1000000);
-		snprintf(fdata, 30, "%f",((double)(end - begin))/1000000);
-		fputs("Execution time: ",log);
-		fputs(fdata,log); fputs("s\n",log);
-		printf("Solution using Heuristic 2+3 = %.1f\n",last);
-		fputs("Solution using Heuristic 2+3 = ",log);
-		snprintf(fdata, 50, "%f", last);
-		fputs(fdata,log); 
-		printf("Solution from the Literature = %.1f\n",res);
-		fputs("\nSolution from the Literature = ",log);
-		snprintf(fdata, 50, "%.1f", res);
-		fputs(fdata,log); perc = ((last-res)*100/last);
-		if(perc != 0){
-			printf("Percentual left = %.2f%%\n",perc);
-			fputs("\nPercentual left = ",log);
-			snprintf(fdata, 50, "%.2f", perc);
-			fputs(fdata,log); fputs("%",log);
-		}else{
-			printf("Literature solution reached!\n");
-			fputs("Literature solution reached!",log);
-		}
-		printf("Permutation: ");
-		fputs("\nPermutation: ",log);
-	
-		for(temp = 1; temp < size; temp++){
-		    printf("%d ",pos[temp]);
-		    snprintf(fdata, 50, "%d", pos[temp]);
-		    fputs(fdata,log); fputs(" ",log);
-		}
-		puts(""); fputs("\n\n",log);
-	
-	
-		findPathRelation(size,pos,flow);
-		last = objectiveFunction(size,pos,flow,value);
-		printf("\nSolution using Relation PathFinder = %.1f\n",last);
-		fputs("Solution using Relation PathFinder = ",log);
-		snprintf(fdata, 50, "%f", last);
-		fputs(fdata,log); fputs("\n",log);
-	
-		begin = clock();
-		findPathRelation(size,pos,flow);
-		last = objectiveFunction(size,pos,flow,value);
-		last = hRecursion(size,pos,flow,value,last);
-		end = clock();
-		printf("Execution time %.6fs\n",((double)(end - begin))/1000000);
-		snprintf(fdata, 30, "%f",((double)(end - begin))/1000000);
-		fputs("Execution time: ",log);
-		fputs(fdata,log); fputs("s\n",log);
-		last = objectiveFunction(size,pos,flow,value);
-		printf("Solution using Heuristic 2+3 = %.1f\n",last);
-		fputs("Solution using Heuristic 2+3 = ",log);
-		snprintf(fdata, 50, "%f", last);
-		fputs(fdata,log); 
-		printf("Solution from the Literature = %.1f\n",res);
-		fputs("\nSolution from the Literature = ",log);
-		snprintf(fdata, 50, "%.1f", res);
-		fputs(fdata,log); perc = ((last-res)*100/last);
-		if(perc != 0){
-			printf("Percentual left = %.2f%%\n",perc);
-			fputs("\nPercentual left = ",log);
-			snprintf(fdata, 50, "%.2f", perc);
-			fputs(fdata,log); fputs("%",log);
-		}else{
-			printf("Literature solution reached!\n");
-			fputs("Literature solution reached!",log);
-		}
-		printf("Permutation: ");
-		fputs("\nPermutation: ",log);
-		
-		for(temp = 1; temp < size; temp++){
-		    printf("%d ",pos[temp]);
-		    snprintf(fdata, 50, "%d", pos[temp]);
-		    fputs(fdata,log); fputs(" ",log);
-		}
-		puts(""); fputs("\n\n",log);
-	
-	
-		findPathRelationFlow(size,pos,flow);
-		last = objectiveFunction(size,pos,flow,value);
-		printf("\nSolution using MaxFlow Relation PathFinder = %.1f\n",last);
-		fputs("Solution using MaxFlow Relation PathFinder = ",log);
-		snprintf(fdata, 50, "%f", last);
-		fputs(fdata,log); fputs("\n",log);
-	
-		begin = clock();
-		findPathRelationFlow(size,pos,flow);
-		last = objectiveFunction(size,pos,flow,value);
-		last = hRecursion(size,pos,flow,value,last);
-		end = clock();
-		printf("Execution time %.6fs\n",((double)(end - begin))/1000000);
-		snprintf(fdata, 30, "%f",((double)(end - begin))/1000000);
-		fputs("Execution time: ",log);
-		fputs(fdata,log); fputs("s\n",log);
-		last = objectiveFunction(size,pos,flow,value);
-		printf("Solution using Heuristic 2+3 = %.1f\n",last);
-		fputs("Solution using Heuristic 2+3 = ",log);
-		snprintf(fdata, 50, "%f", last);
-		fputs(fdata,log); 
-		printf("Solution from the Literature = %.1f\n",res);
-		fputs("\nSolution from the Literature = ",log);
-		snprintf(fdata, 50, "%.1f", res);
-		fputs(fdata,log); perc = ((last-res)*100/last);
-		if(perc != 0){
-			printf("Percentual left = %.2f%%\n",perc);
-			fputs("\nPercentual left = ",log);
-			snprintf(fdata, 50, "%.2f", perc);
-			fputs(fdata,log); fputs("%",log);
-		}else{
-			printf("Literature solution reached!\n");
-			fputs("Literature solution reached!",log);
-		}
-		printf("Permutation: ");
-		fputs("\nPermutation: ",log);
-		
-		for(temp = 1; temp < size; temp++){
-		    printf("%d ",pos[temp]);
-		    snprintf(fdata, 50, "%d", pos[temp]);
-		    fputs(fdata,log); fputs(" ",log);
-		}
-		puts(""); fputs("\n",log);
-		fclose(log);
+		execution(size,pos,flow,value,findPath,0,res,ldata,log);
+		execution(size,pos,flow,value,findPathFlow,1,res,ldata,log);
+		execution(size,pos,flow,value,findPathRelation,2,res,ldata,log);
+		execution(size,pos,flow,value,findPathRelationFlow,3,res,ldata,log);
     }
     fclose(data);
 }

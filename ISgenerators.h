@@ -6,7 +6,7 @@
  * 		#### INITIAL SOLUTION GENERATORS ####
  */
 
-void findPath(int size, int pos[], int flow[][size], int gsize){
+void findPath(int size, int pos[][size], int flow[][size]){
     /*
          *  VARIABLES
          *  gsize: Size of Groups
@@ -17,7 +17,7 @@ void findPath(int size, int pos[], int flow[][size], int gsize){
          *  *pp: Memory Space Pointer
          *  odd: If the number of facilities is odd, some alterations on the sub-routines will be executed
          */
-    int aux,temp,i=1,j=1;
+    int aux,temp,i=1,j=1,gsize = 2;
     int *ps,*pe,*pp=malloc(sizeof(int));
     // ## GROUP CREATION ##
     while(flow[0][0] < size){  //while there still are facilities to be utilized
@@ -70,14 +70,14 @@ void findPath(int size, int pos[], int flow[][size], int gsize){
         }
         //## SAVING GROUP INTO 'POS' & NULLIFYING USED FACILITIES ##
         while(ps<=pe){
-        	pos[flow[0][0]++] = *ps;
+        	pos[0][flow[0][0]++] = *ps;
             ps++;
         }
         //## ODD FACILITY NUMBER CASE ##
         if(flow[0][0] == size-1){
             for(i = 1; i < size; i++)
                 if(flow[i][0] == 0){
-                    pos[size-1]= i;
+                    pos[0][size-1] = i;
                     flow[i][0] = 1;
                     flow[0][0]++;
                     break;
@@ -87,7 +87,7 @@ void findPath(int size, int pos[], int flow[][size], int gsize){
     free(pp);
 }
 
-void findPathFlow(int size, int pos[], int flow[][size]){
+void findPathFlow(int size, int pos[][size], int flow[][size]){
     /*
      *  VARIABLES
      *  aux,t & temp: auxiliary variables
@@ -119,17 +119,17 @@ void findPathFlow(int size, int pos[], int flow[][size]){
 			flow[0][t]=-1;
 			if(aux==0){
 				aux = 1;
-				pos[m++]=t;
+				pos[0][m++]=t;
 			}else{
 				aux = 0;
-				pos[n--]=t;
+				pos[0][n--]=t;
 			}
 		}
 	}
 
 }
 
-void findPathRelation(int size, int pos[], int flow[][size]){
+void findPathRelation(int size, int pos[][size], int flow[][size]){
 	/*
      *  VARIABLES
      *  aux & temp | p1 & p2: auxiliary variables
@@ -250,7 +250,7 @@ void findPathRelation(int size, int pos[], int flow[][size]){
 	// ## SAVING INTO POS ##
 	for(i = 1; i < size; i++){
 		flow[0][i]=-1;
-		pos[i] = (*ps).f;
+		pos[0][i] = (*ps).f;
 		ps = ps->n;
 	}
 }
@@ -280,7 +280,7 @@ void switcher(int *resp, int temp, int size, int flow[][size],int *arr,int st,in
     }
 }
 
-void findPathRelationFlow(int size, int pos[], int flow[][size]){
+void findPathRelationFlow(int size, int pos[][size], int flow[][size]){
 	/*
      *  VARIABLES
      *  aux & temp | p1 & p2: auxiliary variables
@@ -390,14 +390,15 @@ void findPathRelationFlow(int size, int pos[], int flow[][size]){
 			(*gaux).fac[i] = resp[i];
 		gaux = gaux->n;
 	}
+	//create new way of saving using multiple solutions
 	//## SAVING TO POS ##
 	temp = 1; p1 = 1; p2 = size-1;
 	while(gs != (g *) NULL){
 		for(i=0;i<(*gs).size;i++)
 			if(temp%2!=0)
-				pos[p1++] = (*gs).fac[i];
+				pos[0][p1++] = (*gs).fac[i];
 			else
-				pos[p2--] = (*gs).fac[i];
+				pos[0][p2--] = (*gs).fac[i];
 		gs = gs->n;
 		temp++;
 	}
