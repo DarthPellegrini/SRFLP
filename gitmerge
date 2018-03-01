@@ -2,6 +2,6 @@
 ./gitcommit
 git checkout master
 git merge development
-git checkout development
 git status
-
+git push
+git checkout development
