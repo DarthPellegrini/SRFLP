@@ -88,7 +88,7 @@ void main(int argc, char *argv[]){
     clock_t begin,end;
     char fdata[256],idata[256];
     // ### READING DATA ###
-    data = fopen("data/data.dat","r");
+    data = fopen("data.dat","r");
     if(data == NULL){
 	    puts("Erro - arquivo de dados nao existe");
 	    exit(1);
