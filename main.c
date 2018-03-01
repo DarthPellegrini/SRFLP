@@ -63,19 +63,11 @@
 */
 void execution(int size, int pos[][size], int flow[][size], float value[][2], void (*pathfinder)(int,int[][size],int[][size]), int IS, double res, char ldata[], FILE *log){
 	/*
-	 * VARIABLES:
-	 * explain this later on
-	 *
-	 *
+	 *	VARIABLES:
+	 *	begin & end: beginning and ending clock times for calculation, respectively
+	 *	s[0 to 3]: the pathfinder's names
+	 *	fdata: auxiliary variable for log savings
 	 */
-	log = fopen(ldata,"rb+");
-	if (log == NULL){
-		log = fopen(ldata,"wb+");
-			if(log == NULL){
-				puts("erro");
-				exit(1);
-			}
-	}
 	clock_t begin,end; char s[4][25], fdata[256];
 	double perc; float last; int temp;
 	strcpy(s[0],"Default");
@@ -83,6 +75,8 @@ void execution(int size, int pos[][size], int flow[][size], float value[][2], vo
 	strcpy(s[2],"Relation");
 	strcpy(s[3],"MaxFlow Relation");
 	
+	//## LOG OPENING ##
+	log = fopen(ldata,"a");
 	
 	//## SHOWING THE INITIAL SOLUTION ##
 	pathfinder(size,pos,flow);
@@ -91,7 +85,7 @@ void execution(int size, int pos[][size], int flow[][size], float value[][2], vo
 	fputs("Solution using ",log);
 	fputs(s[IS] ,log); fputs(" PathFinder = ",log);
 	snprintf(fdata, 50, "%.1f", last);
-	fputs(fdata,log); fputs("\n\n",log);
+	fputs(fdata,log); fputs("\n",log);
 	
 	//## EXECUTING THE ALGORITHM ##
 	begin = clock();
@@ -119,7 +113,7 @@ void execution(int size, int pos[][size], int flow[][size], float value[][2], vo
 		fputs(fdata,log); fputs("%",log);
 	}else{
 		printf("Literature solution reached!\n");
-		fputs("Literature solution reached!",log);
+		fputs("\nLiterature solution reached!",log);
 	}
 	
 	//## CURRENT PERMUTATION ##
@@ -141,6 +135,7 @@ void execution(int size, int pos[][size], int flow[][size], float value[][2], vo
 void main(int argc, char *argv[]){
     /*
      *  VARIABLES
+     * 	UPDATE THIS LATER
      *  arq: file pointer
      *  fdata: data read from the file
      *  p: file data pointer
@@ -174,6 +169,7 @@ void main(int argc, char *argv[]){
 		printf("\nInstance: %s\n",idata);
 		fgets(ldata, sizeof(ldata),data);
 		ldata[strlen(ldata)-1] = '\0';
+		log = fopen(ldata,"wb+");
 		//saves the size of the Facility
 		fgets(fdata,1024,arq);
 		size = (1+atoi(fdata));
@@ -212,11 +208,13 @@ void main(int argc, char *argv[]){
 		    }
 		}
 		fclose(arq);
+		
 		// ### HEURISTICS AND POSITIONING LOGIC ###
 		execution(size,pos,flow,value,findPath,0,res,ldata,log);
 		execution(size,pos,flow,value,findPathFlow,1,res,ldata,log);
 		execution(size,pos,flow,value,findPathRelation,2,res,ldata,log);
 		execution(size,pos,flow,value,findPathRelationFlow,3,res,ldata,log);
+		fclose(log);
     }
     fclose(data);
 }
