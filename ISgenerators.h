@@ -290,7 +290,6 @@ void findPathRelationFlow(int size, int pos[], int flow[][size]){
      *	gs & ge: First and Last Group in group array, respectively
      *	gp & gaux & gtemp: Auxiliary Group Pointers
      */
-    //starting multiple solutions module
     int i,j,p1,p2,aux,temp,gsize=8,resp[gsize+1];
     flow[0][0] = 0;
     for(i = 1; i < size; i++){
