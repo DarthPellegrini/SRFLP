@@ -1,6 +1,7 @@
 #ifndef _ISgenerators_h
 #define _ISgenerators_h
 #include <math.h>
+#include "Functions.h"
 
  /*
  * 		#### INITIAL SOLUTION GENERATORS ####
@@ -255,31 +256,6 @@ void findPathRelation(int size, int pos[][size], int flow[][size]){
 	}
 }
 
-void swap(int *x1,int *x2){
-    int x=*x1;
-    *x1=*x2;
-    *x2=x;
-}
-void switcher(int *resp, int temp, int size, int flow[][size],int *arr,int st,int ls){
-    int i=0;
-    if(st==ls){
-        int k,help=0;
-        for(k=0;k<ls-1;k++)
-            help += flow[arr[k]][arr[k+1]];
-		if(help < temp){
-			for(k=0;k<ls;k++)
-				resp[k] = arr[k];
-			temp = help;
-		}
-	}else{
-        for(i=st;i<ls;i++){
-            swap(arr+st,arr+i);
-            switcher(resp,temp,size,flow,arr,st+1,ls);
-            swap(arr+st,arr+i);
-        }
-    }
-}
-
 void findPathRelationFlow(int size, int pos[][size], int flow[][size]){
 	/*
      *  VARIABLES
@@ -391,6 +367,7 @@ void findPathRelationFlow(int size, int pos[][size], int flow[][size]){
 		gaux = gaux->n;
 	}
 	//create new way of saving using multiple solutions
+	
 	//## SAVING TO POS ##
 	temp = 1; p1 = 1; p2 = size-1;
 	while(gs != (g *) NULL){

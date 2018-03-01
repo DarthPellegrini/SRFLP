@@ -4,6 +4,7 @@
 #include <time.h>
 #include "Heuristics.h"
 #include "ISgenerators.h"
+#include "Functions.h"
 
 /*
     This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
@@ -57,76 +58,6 @@
     1 2 3 4 0
     *file ends*
 */
-
-/*
-*	EXECUTION AND SAVING FUNCTION
-*/
-void execution(int size, int pos[][size], int flow[][size], float value[][2], void (*pathfinder)(int,int[][size],int[][size]), int IS, double res, char ldata[], FILE *log){
-	/*
-	 *	VARIABLES:
-	 *	begin & end: beginning and ending clock times for calculation, respectively
-	 *	s[0 to 3]: the pathfinder's names
-	 *	fdata: auxiliary variable for log savings
-	 */
-	clock_t begin,end; char s[4][25], fdata[256];
-	double perc; float last; int temp;
-	strcpy(s[0],"Default");
-	strcpy(s[1],"MaxFlow");
-	strcpy(s[2],"Relation");
-	strcpy(s[3],"MaxFlow Relation");
-	
-	//## LOG OPENING ##
-	log = fopen(ldata,"a");
-	
-	//## SHOWING THE INITIAL SOLUTION ##
-	pathfinder(size,pos,flow);
-	last = objectiveFunction(size,pos[0],flow,value);
-	printf("\nSolution using %s PathFinder = %.1f\n",s[IS],last);
-	fputs("Solution using ",log);
-	fputs(s[IS] ,log); fputs(" PathFinder = ",log);
-	snprintf(fdata, 50, "%.1f", last);
-	fputs(fdata,log); fputs("\n",log);
-	
-	//## EXECUTING THE ALGORITHM ##
-	begin = clock();
-	pathfinder(size,pos,flow);
-	last = objectiveFunction(size,pos[0],flow,value);
-	last = hRecursion(size,pos,flow,value,last);
-	end = clock();
-	
-	//## EXECUTION DATA ##
-	printf("Execution time %.6fs\n",((double)(end - begin))/1000000);
-	snprintf(fdata, 30, "%.1f",((double)(end - begin))/1000000);
-	fputs("Execution time: ",log);
-	fputs(fdata,log); fputs("s\n",log);
-	printf("Solution using Heuristic 2+3 = %.1f\n",last);
-	fputs("Solution using Heuristic 2+3 = ",log);
-	snprintf(fdata, 50, "%.1f", last);	fputs(fdata,log); 
-	printf("Solution from the Literature = %.1f\n",res);
-	fputs("\nSolution from the Literature = ",log);
-	snprintf(fdata, 50, "%.1f", res);
-	fputs(fdata,log); perc = ((last-res)*100/last);
-	if(perc != 0){
-		printf("Percentual left = %.2f%%\n",perc);
-		fputs("\nPercentual left = ",log);
-		snprintf(fdata, 50, "%.2f", perc);
-		fputs(fdata,log); fputs("%",log);
-	}else{
-		printf("Literature solution reached!\n");
-		fputs("\nLiterature solution reached!",log);
-	}
-	
-	//## CURRENT PERMUTATION ##
-	printf("Permutation: ");
-	fputs("\nPermutation: ",log);
-	for(temp = 1; temp < size; temp++){
-	    printf("%d ",pos[0][temp]);
-	    snprintf(fdata, 50, "%d", pos[0][temp]);
-	    fputs(fdata,log); fputs(" ",log);
-	}
-	puts(""); fputs("\n\n",log);
-	fclose(log);
-}
 
 /*
 *	MAIN FUNCTION
@@ -210,10 +141,10 @@ void main(int argc, char *argv[]){
 		fclose(arq);
 		
 		// ### HEURISTICS AND POSITIONING LOGIC ###
-		execution(size,pos,flow,value,findPath,0,res,ldata,log);
-		execution(size,pos,flow,value,findPathFlow,1,res,ldata,log);
-		execution(size,pos,flow,value,findPathRelation,2,res,ldata,log);
-		execution(size,pos,flow,value,findPathRelationFlow,3,res,ldata,log);
+		execution(size,pos,flow,value,findPath,heuristic2,0,res,ldata,log);
+		execution(size,pos,flow,value,findPathFlow,heuristic2,1,res,ldata,log);
+		execution(size,pos,flow,value,findPathRelation,heuristic2,2,res,ldata,log);
+		execution(size,pos,flow,value,findPathRelationFlow,heuristic2,3,res,ldata,log);
 		fclose(log);
     }
     fclose(data);

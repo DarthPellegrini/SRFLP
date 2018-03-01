@@ -1,27 +1,6 @@
 #ifndef _Heuristics_h
 #define _Heuristics_h
- /*
- * 		#### OBJECTIVE FUNCTION ####
- */
-
-float objectiveFunction(int size,int sol[],int flow[][size],float value[][2]){
-    //calculates the Objective Value of the informed Instance/Set and the found Permutation.
-    int i,j;
-    float result = 0;
-    for(i=1; i<(size-1); i++){
-        //member
-        for(j=i+1; j<size; j++){
-            //permutations
-            int st = i,c = 0;
-            while(st+1 < j){
-                c+= value[sol[st+1]][0];
-                st++;
-            }
-            result += (c+value[sol[i]][1]+value[sol[j]][1])*flow[sol[i]][sol[j]];
-        }
-    }
-    return result;
-} 
+#include "Functions.h"
  
  /*
  * 		#### HEURISTICS ####
@@ -417,16 +396,6 @@ float heuristic3(int size, int pos[][size], int flow[][size],float value[][2],fl
     }
     puts("done");
     return ps;
-}
- 
-float hRecursion(int size, int pos[][size], int flow[][size],float value[][2],float last){
-	//float aux = heuristic3(size,solsize,pos,flow,value,last);
-	float aux = heuristic2(size,pos,flow,value,last);
-	//printf("Current Solution = %.1f\n",aux);
-	if(aux < last)
-		return hRecursion(size,pos,flow,value,aux);		
-	else
-		return aux;
 }
  
 #endif

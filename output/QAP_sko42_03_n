@@ -6,21 +6,21 @@ Percentual left = 1.37%
 Permutation: 16 10 19 42 27 2 41 5 12 36 23 30 39 35 18 17 25 31 13 20 26 7 3 28 34 6 38 40 37 24 14 4 33 9 15 1 21 11 29 8 32 22 
 
 Solution using MaxFlow PathFinder = 232906.5
-Execution time: 11.0s
+Execution time: 10.2s
 Solution using Heuristic 2+3 = 175726.5
 Solution from the Literature = 173267.5
 Percentual left = 1.40%
 Permutation: 16 10 19 42 27 2 15 9 4 33 14 35 13 31 39 30 28 23 36 20 26 18 12 40 17 3 7 34 25 5 24 37 6 38 41 1 21 11 29 8 32 22 
 
 Solution using Relation PathFinder = 215162.5
-Execution time: 7.8s
+Execution time: 7.1s
 Solution using Heuristic 2+3 = 174681.5
 Solution from the Literature = 173267.5
 Percentual left = 0.81%
 Permutation: 32 42 10 19 27 2 5 41 15 9 14 18 17 35 12 26 13 31 7 20 25 40 30 39 3 36 23 28 37 24 6 34 38 4 33 21 1 11 22 8 29 16 
 
 Solution using MaxFlow Relation PathFinder = 246073.5
-Execution time: 11.2s
+Execution time: 12.9s
 Solution using Heuristic 2+3 = 174832.5
 Solution from the Literature = 173267.5
 Percentual left = 0.90%
