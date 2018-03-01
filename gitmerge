@@ -1,0 +1,7 @@
+#!/bin/bash
+./gitcommit
+git checkout master
+git merge development
+git checkout development
+git status
+
