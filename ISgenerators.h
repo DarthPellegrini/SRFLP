@@ -183,7 +183,6 @@ void findPathRelation(int size, int pos[][size], int flow[][size]){
 			arr+=2;
 		}else
 			if(p2 == (*ps).f){
-				//puts("n1");
 				flow[0][(*ps).f] = 0;
 				ps->p = malloc(sizeof(fac));
 				ps->p->n = ps;

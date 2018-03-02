@@ -25,7 +25,7 @@ float objectiveFunction(int size,int sol[],int flow[][size],float value[][2]){
 } 
 
 /*
-*	#### RECURSIVE HEURISTIC CALLER ####
+*	#### RECURSIVE HEURISTIC FUNCTION CALLER ####
 */
 
 float hRecursion(int size, int pos[][size], int flow[][size],float value[][2],float last,float (*heuristic)(int,int[][size],int[][size],float[][2],float)){

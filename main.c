@@ -69,12 +69,15 @@ void main(int argc, char *argv[]){
      * 	UPDATE THIS LATER
      *  arq: file pointer
      *  fdata: data read from the file
-     *  p: file data pointer
+     *	idata: instance data 
+     *	ldata: log data
      *  last: last solution found
      *  size: size of the facility (+1 for easy calculations)
      *	solsize: quantity of solutions (must be quantity+1, position 0 is used to store the best solution)
      *  i & j: loop controlling
      *  value: value of each facility and half of his value
+     *	pos[0][1 to size]: current best solution
+     *	pos[1 to solsize][1 to size]: solution generated
      *  Flow[][] configurations is as follows:
      *  Flow[1 to size][1 to size]: flow between facilities
      *  Flow[i to size][0]: if the facility was already used in a permutation(0=no,1=yes)
