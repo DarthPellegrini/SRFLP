@@ -28,11 +28,11 @@ float objectiveFunction(int size,int sol[],int flow[][size],float value[][2]){
 *	#### RECURSIVE HEURISTIC FUNCTION CALLER ####
 */
 
-float hRecursion(int size, int pos[][size], int flow[][size],float value[][2],float last,float (*heuristic)(int,int[][size],int[][size],float[][2],float)){
-	float aux = heuristic(size,pos,flow,value,last);
+float hRecursion(int size, int solsize, int pos[][size], int flow[][size],float value[][2],float last,float (*heuristic)(int,int,int[][size],int[][size],float[][2],float)){
+	float aux = heuristic(size,solsize,pos,flow,value,last);
 	//printf("Current Solution = %.1f\n",aux);
 	if(aux < last)
-		return heuristic(size,pos,flow,value,aux);		
+		return hRecursion(size,solsize,pos,flow,value,aux,heuristic);		
 	else
 		return aux;
 }
@@ -70,7 +70,7 @@ void switcher(int *resp, int temp, int size, int flow[][size],int *arr,int st,in
 /*
 *	#### EXECUTION FUNCTION ####
 */
-void execution(int size, int pos[][size], int flow[][size], float value[][2], void (*pathfinder)(int,int[][size],int[][size]),float (*heuristic)(int,int[][size],int[][size],float[][2],float), int IS, double res, char ldata[], FILE *log){
+void execution(int size, int solsize, int pos[][size], int flow[][size], float value[][2], void (*pathfinder)(int,int,int[][size],int[][size]),float (*heuristic)(int,int,int[][size],int[][size],float[][2],float), int IS, double res, char ldata[], FILE *log){
 	/*
 	 *	VARIABLES:
 	 *	begin & end: beginning and ending clock times for calculation, respectively
@@ -93,7 +93,7 @@ void execution(int size, int pos[][size], int flow[][size], float value[][2], vo
 	log = fopen(ldata,"a");
 	
 	//## SHOWING THE INITIAL SOLUTION ##
-	pathfinder(size,pos,flow);
+	pathfinder(size,solsize,pos,flow);
 	last = objectiveFunction(size,pos[0],flow,value);
 	printf("\nSolution using %s PathFinder = %.1f\n",s[IS],last);
 	fputs("Solution using ",log);
@@ -103,9 +103,9 @@ void execution(int size, int pos[][size], int flow[][size], float value[][2], vo
 	
 	//## EXECUTING THE ALGORITHM ##
 	begin = clock();
-	pathfinder(size,pos,flow);
+	pathfinder(size,solsize,pos,flow);
 	last = objectiveFunction(size,pos[0],flow,value);
-	last = heuristic(size,pos,flow,value,last);
+	last = heuristic(size,solsize,pos,flow,value,last);
 	end = clock();
 	
 	//## EXECUTION DATA ##
@@ -113,8 +113,8 @@ void execution(int size, int pos[][size], int flow[][size], float value[][2], vo
 	snprintf(fdata, 30, "%.1f",((double)(end - begin))/1000000);
 	fputs("Execution time: ",log);
 	fputs(fdata,log); fputs("s\n",log);
-	printf("Solution using Heuristic 2+3 = %.1f\n",last);
-	fputs("Solution using Heuristic 2+3 = ",log);
+	printf("Solution using a Permutation Heuristic = %.1f\n",last);
+	fputs("Solution using a permutation Heuristic = ",log);
 	snprintf(fdata, 50, "%.1f", last);	fputs(fdata,log); 
 	printf("Solution from the Literature = %.1f\n",res);
 	fputs("\nSolution from the Literature = ",log);

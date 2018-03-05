@@ -108,7 +108,7 @@ void main(int argc, char *argv[]){
 		fgets(fdata,1024,arq);
 		size = (1+atoi(fdata));
 		//flow matrix and positioning declarations
-		int flow[size][size],pos[size][solsize],aux[size];
+		int flow[size][size],pos[solsize][size],aux[size];
 		float value[size][2],last;
 		double res;
 		//saving positioning
@@ -144,10 +144,10 @@ void main(int argc, char *argv[]){
 		fclose(arq);
 		
 		// ### HEURISTICS AND POSITIONING LOGIC ###
-		execution(size,pos,flow,value,findPath,heuristic2,0,res,ldata,log);
-		execution(size,pos,flow,value,findPathFlow,heuristic2,1,res,ldata,log);
-		execution(size,pos,flow,value,findPathRelation,heuristic2,2,res,ldata,log);
-		execution(size,pos,flow,value,findPathRelationFlow,heuristic2,3,res,ldata,log);
+		//execution(size,solsize,pos,flow,value,findPath,heuristic2,0,res,ldata,log);
+		//execution(size,solsize,pos,flow,value,findPathFlow,heuristic2,1,res,ldata,log);
+		//execution(size,solsize,pos,flow,value,findPathRelation,heuristic2,2,res,ldata,log);
+		execution(size,solsize,pos,flow,value,findPathRelationFlow,heuristic2,3,res,ldata,log);
 		fclose(log);
     }
     fclose(data);

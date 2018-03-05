@@ -7,7 +7,7 @@
  * 		#### INITIAL SOLUTION GENERATORS ####
  */
 
-void findPath(int size, int pos[][size], int flow[][size]){
+void findPath(int size, int solsize, int pos[][size], int flow[][size]){
     /*
          *  VARIABLES
          *  gsize: Size of Groups
@@ -88,7 +88,7 @@ void findPath(int size, int pos[][size], int flow[][size]){
     free(pp);
 }
 
-void findPathFlow(int size, int pos[][size], int flow[][size]){
+void findPathFlow(int size, int solsize, int pos[][size], int flow[][size]){
     /*
      *  VARIABLES
      *  aux,t & temp: auxiliary variables
@@ -130,7 +130,7 @@ void findPathFlow(int size, int pos[][size], int flow[][size]){
 
 }
 
-void findPathRelation(int size, int pos[][size], int flow[][size]){
+void findPathRelation(int size, int solsize, int pos[][size], int flow[][size]){
 	/*
      *  VARIABLES
      *  aux & temp | p1 & p2: auxiliary variables
@@ -255,7 +255,7 @@ void findPathRelation(int size, int pos[][size], int flow[][size]){
 	}
 }
 
-void findPathRelationFlow(int size, int pos[][size], int flow[][size]){
+void findPathRelationFlow(int size, int solsize, int pos[][size], int flow[][size]){
 	/*
      *  VARIABLES
      *  aux & temp | p1 & p2: auxiliary variables
@@ -365,9 +365,19 @@ void findPathRelationFlow(int size, int pos[][size], int flow[][size]){
 			(*gaux).fac[i] = resp[i];
 		gaux = gaux->n;
 	}
-	//create new way of saving using multiple solutions
-	
-	
+	//## MULTIPLE SOLUTIONS CREATOR ##
+	int sol,gquant = ceil(size%gsize);
+	for(sol = 1; sol < solsize; sol++){
+		g list[gquant]; temp = 0;
+		for(aux = 0; aux < gquant; aux++)
+			list[aux] = NULL;
+		while(temp < gquant){
+			//solution creator logic
+		}
+		for(aux = 0; aux < gquant; aux++){
+			//saving to pos
+		}
+	}
 	//## SAVING TO POS ##
 	temp = 1; p1 = 1; p2 = size-1;
 	while(gs != (g *) NULL){
