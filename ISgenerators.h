@@ -266,6 +266,7 @@ void findPathRelationFlow(int size, int solsize, int pos[][size], int flow[][siz
      *	gp & gaux & gtemp: Auxiliary Group Pointers
      */
     int i,j,p1,p2,aux,temp,gsize=8,resp[gsize+1];
+    srand(time(NULL));
     flow[0][0] = 0;
     for(i = 1; i < size; i++){
 	   	flow[i][0] = 0;
@@ -366,19 +367,59 @@ void findPathRelationFlow(int size, int solsize, int pos[][size], int flow[][siz
 		gaux = gaux->n;
 	}
 	//## MULTIPLE SOLUTIONS CREATOR ##
-	int sol,gquant = ceil(size%gsize);
+	double dsize = size-1,dgsize = gsize;
+	int r,sol,gquant = ceil(dsize/dgsize);
 	for(sol = 1; sol < solsize; sol++){
-		g list[gquant]; temp = 0;
-		for(aux = 0; aux < gquant; aux++)
-			list[aux] = NULL;
+		//	temp: list umcomplete = 0, list completed = 1
+		//	value from group struct used to set the positioning
+		int used[gquant];
+		for(i = 0; i < gquant; i++)
+			used[i] = 0;
+		gaux = gs;
+		//generating the positioning
+		while(gaux != (g *) NULL){
+			/*printf("bef order: ");
+			gtemp = gs;
+			while(gtemp != (g *) NULL){
+				printf("%d ", (*gtemp).value);
+				gtemp = gtemp->n;
+			}
+			puts("");*/
+			do{
+				// a more advanced logic can be implemented here
+				r = rand()%(gquant);
+				//printf("r = %d | used[%d] = %d\n",r,r,used[r]);
+			}while(used[r] != 0);
+			(*gaux).value = r;
+			gaux = gaux->n;
+			used[r] = 1;
+			/*printf("aft order: ");
+			gtemp = gs;
+			while(gtemp != (g *) NULL){
+				printf("%d ", (*gtemp).value);
+				gtemp = gtemp->n;
+			}
+			puts("");*/
+		}
+		//saving the positioning to pos[sol]
+		temp = 0; j = 1;
 		while(temp < gquant){
-			//solution creator logic
+			gaux = gs;
+			while((*gaux).value != temp)
+				gaux = gaux->n;
+			for(i = 0; i < (*gaux).size; i++)
+				pos[sol][j++] = (*gaux).fac[i];
+			(*gaux).value = 0;
+			temp++;
 		}
-		for(aux = 0; aux < gquant; aux++){
-			//saving to pos
-		}
+		/*
+		printf("sol= ");
+		for(i = 1; i < size; i++)
+			printf("%d ",pos[sol][i]);
+		puts(""); puts("");
+		*/
 	}
-	//## SAVING TO POS ##
+	// ## INITIAL NOT OPTMIZED SOLUTION ##
 	temp = 1; p1 = 1; p2 = size-1;
 	while(gs != (g *) NULL){
 		for(i=0;i<(*gs).size;i++)

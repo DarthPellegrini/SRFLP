@@ -28,11 +28,11 @@ float objectiveFunction(int size,int sol[],int flow[][size],float value[][2]){
 *	#### RECURSIVE HEURISTIC FUNCTION CALLER ####
 */
 
-float hRecursion(int size, int solsize, int pos[][size], int flow[][size],float value[][2],float last,float (*heuristic)(int,int,int[][size],int[][size],float[][2],float)){
-	float aux = heuristic(size,solsize,pos,flow,value,last);
+float hRecursion(int size, int pos[], int flow[][size],float value[][2],float last,float (*heuristic)(int,int[],int[][size],float[][2],float)){
+	float aux = heuristic(size,pos,flow,value,last);
 	//printf("Current Solution = %.1f\n",aux);
 	if(aux < last)
-		return hRecursion(size,solsize,pos,flow,value,aux,heuristic);		
+		return hRecursion(size,pos,flow,value,aux,heuristic);		
 	else
 		return aux;
 }
@@ -70,7 +70,7 @@ void switcher(int *resp, int temp, int size, int flow[][size],int *arr,int st,in
 /*
 *	#### EXECUTION FUNCTION ####
 */
-void execution(int size, int solsize, int pos[][size], int flow[][size], float value[][2], void (*pathfinder)(int,int,int[][size],int[][size]),float (*heuristic)(int,int,int[][size],int[][size],float[][2],float), int IS, double res, char ldata[], FILE *log){
+void execution(int size, int solsize, int pos[][size], int flow[][size], float value[][2], void (*pathfinder)(int,int,int[][size],int[][size]),float (*heuristic)(int,int[],int[][size],float[][2],float), int IS, double res, char ldata[], FILE *log){
 	/*
 	 *	VARIABLES:
 	 *	begin & end: beginning and ending clock times for calculation, respectively
@@ -81,9 +81,10 @@ void execution(int size, int solsize, int pos[][size], int flow[][size], float v
 	 *	res: literature solution
 	 *	temp: auxiliary variable
 	 *	last: last solution generated
+	 *  best: best solution generated
 	 */
 	clock_t begin,end; char s[4][25], fdata[256];
-	double perc; float last; int temp;
+	double perc; float last,best; int temp,i;
 	strcpy(s[0],"Default");
 	strcpy(s[1],"MaxFlow");
 	strcpy(s[2],"Relation");
@@ -105,7 +106,15 @@ void execution(int size, int solsize, int pos[][size], int flow[][size], float v
 	begin = clock();
 	pathfinder(size,solsize,pos,flow);
 	last = objectiveFunction(size,pos[0],flow,value);
-	last = heuristic(size,solsize,pos,flow,value,last);
+	for(temp = 1; temp < solsize; temp++){
+		last = hRecursion(size,pos[temp],flow,value,last,heuristic);
+		printf("MSG in phase %d with the result %.1f\n", temp, last);
+		if (last < best){
+			for(i = 1; i < size; i++)
+				pos[0][i] = pos[temp][i];
+			best = last;
+		}
+	}
 	end = clock();
 	
 	//## EXECUTION DATA ##
@@ -113,13 +122,13 @@ void execution(int size, int solsize, int pos[][size], int flow[][size], float v
 	snprintf(fdata, 30, "%.1f",((double)(end - begin))/1000000);
 	fputs("Execution time: ",log);
 	fputs(fdata,log); fputs("s\n",log);
-	printf("Solution using a Permutation Heuristic = %.1f\n",last);
+	printf("Solution using a Permutation Heuristic = %.1f\n",best);
 	fputs("Solution using a permutation Heuristic = ",log);
-	snprintf(fdata, 50, "%.1f", last);	fputs(fdata,log); 
+	snprintf(fdata, 50, "%.1f", best);	fputs(fdata,log); 
 	printf("Solution from the Literature = %.1f\n",res);
 	fputs("\nSolution from the Literature = ",log);
 	snprintf(fdata, 50, "%.1f", res);
-	fputs(fdata,log); perc = ((last-res)*100/last);
+	fputs(fdata,log); perc = ((best-res)*100/best);
 	if(perc != 0){
 		printf("Percentual left = %.2f%%\n",perc);
 		fputs("\nPercentual left = ",log);

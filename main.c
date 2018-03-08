@@ -2,9 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include "Functions.h"
 #include "Heuristics.h"
 #include "ISgenerators.h"
-#include "Functions.h"
+
 
 /*
     This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
