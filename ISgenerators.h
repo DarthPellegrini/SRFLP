@@ -265,7 +265,7 @@ void findPathRelationFlow(int size, int solsize, int pos[][size], int flow[][siz
      *	gs & ge: First and Last Group in group array, respectively
      *	gp & gaux & gtemp: Auxiliary Group Pointers
      */
-    int i,j,p1,p2,aux,temp,gsize=8,resp[gsize+1];
+    int i,j,p1,p2,aux,temp,gsize=4,resp[gsize+1];
     srand(time(NULL));
     flow[0][0] = 0;
     for(i = 1; i < size; i++){
