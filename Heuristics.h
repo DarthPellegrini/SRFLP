@@ -6,7 +6,7 @@
  * 		#### HEURISTICS ####
  */
 
-void heuristic1(int size, int pos[][size], int flow[][size], int gsize){
+void heuristic1(int size, int pos[], int flow[][size], int gsize){
     int aux,temp,i,j;
     typedef struct facilities{
         int f;
@@ -47,9 +47,9 @@ void heuristic1(int size, int pos[][size], int flow[][size], int gsize){
                 switch(temp){
                     case 1:
                         for(j = i; j < (i+gsize-1) && j+gsize < size; j++){
-                            temp = pos[0][j];
-                            pos[0][j] = pos[0][j+gsize];
-                            pos[0][j+gsize] = temp;
+                            temp = pos[j];
+                            pos[j] = pos[j+gsize];
+                            pos[j+gsize] = temp;
                         }
                         break;
                     case 2:
@@ -60,32 +60,32 @@ void heuristic1(int size, int pos[][size], int flow[][size], int gsize){
                         	pp->p = (fac *) NULL;
                         	j = i+gsize;
                         	while(j < size){
-                        		(*pe).f = pos[0][j++];
+                        		(*pe).f = pos[j++];
                         		pe->n = malloc(sizeof(fac));
                                 pe = pe->n;
                             }
                             for(j = 1; j <= gsize ; j++)
-                                pos[0][size-j] = pos[0][i+gsize-j];
+                                pos[size-j] = pos[i+gsize-j];
                             j = 0;
                             while(ps != pe){
-                            	pos[0][i+(j++)] = (*ps).f;
+                            	pos[i+(j++)] = (*ps).f;
                                 ps = ps->n;
                             }
                             gsize+=gsize;
                         }else{
                             for(j = (i+gsize); j < (i+gsize+gsize-c); j++){
-                                temp = pos[0][j];
-                                pos[0][j] = pos[0][i+gsize+gsize-c];
-                                pos[0][i+gsize+gsize-c] = temp;
+                                temp = pos[j];
+                                pos[j] = pos[i+gsize+gsize-c];
+                                pos[i+gsize+gsize-c] = temp;
                                 c++;
                             }
                         }
                         break;
                     case 3:
                         for(j = i; j < (i+gsize-c); j++){
-                            temp = pos[0][j];
-                            pos[0][j] = pos[0][i+gsize-c];
-                            pos[0][i+gsize-c] = temp;
+                            temp = pos[j];
+                            pos[j] = pos[i+gsize-c];
+                            pos[i+gsize-c] = temp;
                             c++;
                         }
                         break;
@@ -112,24 +112,24 @@ void heuristic1(int size, int pos[][size], int flow[][size], int gsize){
                 //Makes permutations inside the new formed groups
                 aux = i; //default
                 for(j = i; j < size && j < i+2*gsize; j++){
-                    if(flow[pos[0][i]][pos[0][j]] > flow[pos[0][i]][pos[0][aux]] 
-                    	&& wasUsed(used,pos[0][j]) == 0){
+                    if(flow[pos[i]][pos[j]] > flow[pos[i]][pos[aux]] 
+                    	&& wasUsed(used,pos[j]) == 0){
                         //so the facilities already moved won't be used again
                         if(j >= i+2*gsize-1 || j == i)
                             aux = j;
                         else{
                             //if the facility is going to be inserted between two other facilities
                             //it's value will only be saved if it's flow is better than the current pair
-                            if(flow[pos[0][i]][pos[0][j+1]] > flow[pos[0][i]][pos[0][aux]])
+                            if(flow[pos[i]][pos[j+1]] > flow[pos[i]][pos[aux]])
                                 aux = j;
                         }
                     }
                 }
                 if(aux != i){
-                    used[c] = pos[0][i];
-                    temp = pos[0][j];
-                    pos[0][j] = pos[0][j+1];
-                    pos[0][j+1] = temp;
+                    used[c] = pos[i];
+                    temp = pos[j];
+                    pos[j] = pos[j+1];
+                    pos[j+1] = temp;
                 }
                 c++;
             }
@@ -369,7 +369,7 @@ float heuristic2(int size, int pos[], int flow[][size],float value[][2],float la
 	return ls;
 }
 
-float heuristic3(int size, int pos[][size], int flow[][size],float value[][2],float last){
+float heuristic3(int size, int pos[], int flow[][size],float value[][2],float last){
 	/*
 	 *  VARIABLES
 	 *  aux,i & j: auxiliary variables
@@ -383,22 +383,22 @@ float heuristic3(int size, int pos[][size], int flow[][size],float value[][2],fl
 		aux = i;
 		for(j = 1; j < size; j++)
 			if(j != i){
-				temp = pos[0][i];
-				pos[0][i] = pos[0][j];
-				pos[0][j] = temp;
-				las = objectiveFunction(size,pos[0],flow,value);
+				temp = pos[i];
+				pos[i] = pos[j];
+				pos[j] = temp;
+				las = objectiveFunction(size,pos,flow,value);
 				if(las < ps){
 					aux = j;
 					ps = las;
 				}
-				pos[0][j] = pos[0][i];
-				pos[0][i] = temp;
+				pos[j] = pos[i];
+				pos[i] = temp;
 			}
 		if(aux != i){
-			temp = pos[0][i];
-			pos[0][i] = pos[0][aux];
-			pos[0][aux] = temp;
-			ps = objectiveFunction(size,pos[0],flow,value);
+			temp = pos[i];
+			pos[i] = pos[aux];
+			pos[aux] = temp;
+			ps = objectiveFunction(size,pos,flow,value);
 			printf("[%d:%d] best = %.1f\n",i,aux,ps);
 			i = 1;
 		}else
