@@ -265,7 +265,7 @@ void findPathRelationFlow(int size, int solsize, int pos[][size], int flow[][siz
      *	gs & ge: First and Last Group in group array, respectively
      *	gp & gaux & gtemp: Auxiliary Group Pointers
      */
-    int i,j,p1,p2,aux,temp,gsize=4,resp[gsize+1];
+    int i,j,p1,p2,aux,temp,gsize=8,resp[gsize+1];
     srand(time(NULL));
     flow[0][0] = 0;
     for(i = 1; i < size; i++){
@@ -366,25 +366,32 @@ void findPathRelationFlow(int size, int solsize, int pos[][size], int flow[][siz
 			(*gaux).fac[i] = resp[i];
 		gaux = gaux->n;
 	}
+	
 	//## MULTIPLE SOLUTIONS CREATOR ##
-	double dsize = size-1,dgsize = gsize;
-	int r,sol,gquant = ceil(dsize/dgsize);
+	int r,sol,gquant = 0;
+	gaux = gs;
+	while (gaux != (g *) NULL){
+		gquant++;
+		gaux = gaux->n;
+	}
+	//printf("gquant=%d\n",gquant);
 	for(sol = 1; sol < solsize; sol++){
-		//	temp: list umcomplete = 0, list completed = 1
-		//	value from group struct used to set the positioning
+		//	field 'value' from group struct used to set the positioning
 		int used[gquant];
 		for(i = 0; i < gquant; i++)
 			used[i] = 0;
 		gaux = gs;
 		//generating the positioning
 		while(gaux != (g *) NULL){
-			/*printf("bef order: ");
+			/*
+			printf("bef order: ");
 			gtemp = gs;
 			while(gtemp != (g *) NULL){
 				printf("%d ", (*gtemp).value);
 				gtemp = gtemp->n;
 			}
-			puts("");*/
+			puts("");
+			//*/
 			do{
 				// a more advanced logic can be implemented here
 				r = rand()%(gquant);
@@ -393,13 +400,15 @@ void findPathRelationFlow(int size, int solsize, int pos[][size], int flow[][siz
 			(*gaux).value = r;
 			gaux = gaux->n;
 			used[r] = 1;
-			/*printf("aft order: ");
+			/*
+			printf("aft order: ");
 			gtemp = gs;
 			while(gtemp != (g *) NULL){
 				printf("%d ", (*gtemp).value);
 				gtemp = gtemp->n;
 			}
-			puts("");*/
+			puts("");
+			//*/
 		}
 		//saving the positioning to pos[sol]
 		temp = 0; j = 1;
@@ -417,7 +426,7 @@ void findPathRelationFlow(int size, int solsize, int pos[][size], int flow[][siz
 		for(i = 1; i < size; i++)
 			printf("%d ",pos[sol][i]);
 		puts(""); puts("");
-		*/
+		//*/
 	}
 	// ## INITIAL NOT OPTMIZED SOLUTION ##
 	temp = 1; p1 = 1; p2 = size-1;
