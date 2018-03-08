@@ -105,7 +105,7 @@ void execution(int size, int solsize, int pos[][size], int flow[][size], float v
 	//## EXECUTING THE ALGORITHM ##
 	begin = clock();
 	pathfinder(size,solsize,pos,flow);
-	last = objectiveFunction(size,pos[0],flow,value);
+	best = last = objectiveFunction(size,pos[0],flow,value);
 	for(temp = 1; temp < solsize; temp++){
 		last = hRecursion(size,pos[temp],flow,value,last,heuristic);
 		printf("MSG in phase %d with the result %.1f\n", temp, last);

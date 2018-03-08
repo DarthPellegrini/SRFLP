@@ -145,9 +145,15 @@ void main(int argc, char *argv[]){
 		fclose(arq);
 		
 		// ### HEURISTICS AND POSITIONING LOGIC ###
-		//execution(size,solsize,pos,flow,value,findPath,heuristic2,0,res,ldata,log);
-		//execution(size,solsize,pos,flow,value,findPathFlow,heuristic2,1,res,ldata,log);
-		//execution(size,solsize,pos,flow,value,findPathRelation,heuristic2,2,res,ldata,log);
+		/* 
+		 *  NOTE 
+		 *	to create multiple solutions to the other PathFinders, 
+		 *	they need to be changed, or a overall logic must be created
+		 * 	Not working in the current state:
+		 * 	execution(size,solsize,pos,flow,value,findPath,heuristic2,0,res,ldata,log);
+		 *	execution(size,solsize,pos,flow,value,findPathFlow,heuristic2,1,res,ldata,log);
+		 *	execution(size,solsize,pos,flow,value,findPathRelation,heuristic2,2,res,ldata,log);
+		 */
 		execution(size,solsize,pos,flow,value,findPathRelationFlow,heuristic2,3,res,ldata,log);
 		fclose(log);
     }
