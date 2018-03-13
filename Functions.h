@@ -84,7 +84,7 @@ void execution(int size, int solsize, int pos[][size], int flow[][size], float v
 	 *  best: best solution generated
 	 */
 	clock_t begin,end; char s[4][25], fdata[256];
-	double perc; float last,best; int temp,i;
+	double perc,ttime; float last,best; int temp,i,msec,sec,min,hour;
 	strcpy(s[0],"Default");
 	strcpy(s[1],"MaxFlow");
 	strcpy(s[2],"Relation");
@@ -118,10 +118,19 @@ void execution(int size, int solsize, int pos[][size], int flow[][size], float v
 	end = clock();
 	
 	//## EXECUTION DATA ##
-	printf("Execution time %.6fs\n",((double)(end - begin))/1000000);
-	snprintf(fdata, 30, "%.1f",((double)(end - begin))/1000000);
+	ttime = (double)(end - begin)/1000000;
+	hour = ttime/3600;
+	min = abs((hour*60)-ttime/60);
+	sec = abs(min*60-ttime);
+	msec = (ttime-sec)*100000;
+	printf("Execution time %dh %dm %ds %dms\n",hour,min,sec,msec);
 	fputs("Execution time: ",log);
-	fputs(fdata,log); fputs("s\n",log);
+	snprintf(fdata, 30, "%dh ",hour); fputs(fdata,log); 
+	snprintf(fdata, 30, "%dm ",min); fputs(fdata,log);
+	snprintf(fdata, 30, "%ds ",sec); fputs(fdata,log);
+	snprintf(fdata, 30, "%dms ",sec); fputs(fdata,log);
+	fputs("\n",log);
+	
 	printf("Solution using a Permutation Heuristic = %.1f\n",best);
 	fputs("Solution using a permutation Heuristic = ",log);
 	snprintf(fdata, 50, "%.1f", best);	fputs(fdata,log); 
