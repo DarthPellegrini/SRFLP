@@ -265,11 +265,11 @@ void findPathRelationFlow(int size, int solsize, int pos[][size], int flow[][siz
      *	gs & ge: First and Last Group in group array, respectively
      *	gp & gaux & gtemp: Auxiliary Group Pointers
      */
-    int i,j,p1,p2,aux,temp,gsize=8,resp[gsize+1];
+    int i,j,p1,p2,aux,temp,gsize=3,resp[gsize+1];
     srand(time(NULL));
     flow[0][0] = 0;
     for(i = 1; i < size; i++){
-	   	flow[i][0] = 0;
+		flow[i][0] = 0;
 	   	flow[0][i] = 0;
 		for(j=1; j<size; j++)
 			flow[0][i]+=flow[i][j];
@@ -288,7 +288,7 @@ void findPathRelationFlow(int size, int solsize, int pos[][size], int flow[][siz
 	gs = gp;	ge = gp;
 	gtemp = gp;
 	temp = 1;
-	while(temp < size-1/2){
+	while(temp < (size-1)/2){
 		//## PAIR UNIT LOGIC ## 
 		p1 = 0; p2 = 0; aux = -1;
 		for(i=1; i<size; i++)
@@ -345,7 +345,7 @@ void findPathRelationFlow(int size, int solsize, int pos[][size], int flow[][siz
 		}
 		temp++;
 	}
-	if((size-1)%gsize!=0 && flow[0][0] < size-1){
+	if(flow[0][0] < size-1){
 		i = 1;
 		while(flow[i][0] != 0 && i < size)
 			i++;
@@ -366,7 +366,6 @@ void findPathRelationFlow(int size, int solsize, int pos[][size], int flow[][siz
 			(*gaux).fac[i] = resp[i];
 		gaux = gaux->n;
 	}
-	
 	//## MULTIPLE SOLUTIONS CREATOR ##
 	int r,sol,gquant = 0;
 	gaux = gs;
@@ -377,6 +376,7 @@ void findPathRelationFlow(int size, int solsize, int pos[][size], int flow[][siz
 	//printf("gquant=%d\n",gquant);
 	for(sol = 1; sol < solsize; sol++){
 		//	field 'value' from group struct used to set the positioning
+		//printf("Sol %d: \n",sol);
 		int used[gquant];
 		for(i = 0; i < gquant; i++)
 			used[i] = 0;

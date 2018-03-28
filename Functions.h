@@ -123,14 +123,14 @@ void execution(int size, int solsize, int pos[][size], int flow[][size], float v
 	min = abs((hour*60)-ttime/60);
 	sec = abs(min*60-ttime);
 	msec = (ttime-sec)*100000;
+	printf("Total Execution Time: %.4fs\n", ttime);
 	printf("Execution time %dh %dm %ds %dms\n",hour,min,sec,msec);
 	fputs("Execution time: ",log);
 	snprintf(fdata, 30, "%dh ",hour); fputs(fdata,log); 
 	snprintf(fdata, 30, "%dm ",min); fputs(fdata,log);
 	snprintf(fdata, 30, "%ds ",sec); fputs(fdata,log);
-	snprintf(fdata, 30, "%dms ",sec); fputs(fdata,log);
+	snprintf(fdata, 30, "%dms ",msec); fputs(fdata,log);
 	fputs("\n",log);
-	
 	printf("Solution using a Permutation Heuristic = %.1f\n",best);
 	fputs("Solution using a permutation Heuristic = ",log);
 	snprintf(fdata, 50, "%.1f", best);	fputs(fdata,log); 
