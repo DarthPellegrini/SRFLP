@@ -288,7 +288,7 @@ void findPathRelationFlow(int size, int solsize, int pos[][size], int flow[][siz
 	gs = gp;	ge = gp;
 	gtemp = gp;
 	temp = 1;
-	while(temp < (size-1)/2){
+	while(temp < size-1){
 		//## PAIR UNIT LOGIC ## 
 		p1 = 0; p2 = 0; aux = -1;
 		for(i=1; i<size; i++)
