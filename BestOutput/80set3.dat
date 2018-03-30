@@ -1,0 +1,7 @@
+Solution using MaxFlow Relation PathFinder = 4190223.0
+Execution time: 0h 51m 21s 306021672ms 
+Solution using a permutation Heuristic = 3251368.0
+Solution from the Literature = 3251368.0
+Literature solution reached!
+Permutation: 57 63 54 53 37 62 61 26 29 32 64 35 48 72 30 22 25 76 67 77 10 50 52 51 8 3 39 78 27 17 80 44 21 14 11 59 23 7 41 19 73 75 15 1 18 2 71 55 60 66 9 38 31 6 12 28 79 65 56 4 42 24 5 45 47 46 43 13 70 69 49 34 36 68 20 33 16 58 40 74 
+
