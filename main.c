@@ -154,6 +154,7 @@ void main(int argc, char *argv[]){
 		 *	execution(size,solsize,pos,flow,value,findPathFlow,heuristic2,1,res,ldata,log);
 		 *	execution(size,solsize,pos,flow,value,findPathRelation,heuristic2,2,res,ldata,log);
 		 */
+		 
 		execution(size,solsize,pos,flow,value,findPathRelationFlow,heuristic2,3,res,ldata,log);
 		fclose(log);
     }

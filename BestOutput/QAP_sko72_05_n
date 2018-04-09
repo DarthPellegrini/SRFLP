@@ -1,7 +1,7 @@
-Solution using MaxFlow Relation PathFinder = 548280.5
-Execution time: 1h 13m 3633s 78074696ms 
-Solution using a permutation Heuristic = 428474.5
+Solution using MaxFlow Relation PathFinder = 527751.5
+Execution time: 0h 36m 8s 216091957ms 
+Solution using a permutation Heuristic = 428244.5
 Solution from the Literature = 428226.5
-Percentual left = 0.0579%
-Permutation: 51 29 34 40 71 9 44 23 1 7 33 38 55 16 41 58 59 46 65 6 19 15 20 57 5 45 66 4 36 25 69 49 68 61 11 24 14 26 13 43 42 52 32 47 62 63 22 50 37 21 12 2 35 72 17 31 67 64 60 39 48 30 28 54 27 70 10 18 56 3 53 8 
+Percentual left = 0.0042%
+Permutation: 8 53 3 56 18 27 54 70 10 28 30 48 39 60 64 67 31 17 72 35 2 12 21 37 50 22 63 62 42 52 47 32 43 13 26 24 11 25 69 45 5 57 4 36 61 68 66 49 14 20 15 19 6 65 46 59 58 41 16 55 38 33 7 1 23 44 9 71 40 34 29 51 
 
