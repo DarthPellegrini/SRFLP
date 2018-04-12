@@ -93,7 +93,7 @@ void main(int argc, char *argv[]){
 	}
     while (fgets(idata, sizeof(idata),data) != NULL){
     	// ### READING DATA ###
-		int size,solsize=11,i=1,j=1,temp;
+		int size,solsize=6,i=1,j=1,temp;
 		char *p;
     	idata[strlen(idata)-1] = '\0';
     	arq = fopen(idata,"rb");

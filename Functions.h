@@ -121,7 +121,7 @@ void execution(int size, int solsize, int pos[][size], int flow[][size], float v
 	ttime = (double)(end - begin)/1000000;
 	hour = ttime/3600;
 	min = abs((hour*60)-ttime/60);
-	sec = abs(min*60-ttime);
+	sec = abs(hour*60-min*3600-ttime);
 	printf("Total Execution Time: %.4fs\n", ttime);
 	printf("Execution time %dh %dm %ds\n",hour,min,sec);
 	fputs("Execution time: ",log);
