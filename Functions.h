@@ -141,10 +141,16 @@ void execution(int size, int solsize, int pos[][size], int flow[][size], float v
 		fputs("\nPercentual left = ",log);
 		snprintf(fdata, 50, "%.4f", perc);
 		fputs(fdata,log); fputs("%",log);
-	}else{
-		printf("Literature solution reached!\n");
-		fputs("\nLiterature solution reached!",log);
-	}
+	}else
+		if(perc < 0){
+			printf("Literature solution passed!\n");
+			fputs("\nLiterature solution passed!",log);
+			
+		}else{
+			printf("Literature solution reached!\n");
+			fputs("\nLiterature solution reached!",log);
+		}
+	
 	
 	//## CURRENT PERMUTATION ##
 	printf("Permutation: ");
