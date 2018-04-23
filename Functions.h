@@ -136,7 +136,7 @@ void execution(int size, int solsize, int pos[][size], int flow[][size], float v
 	fputs("\nSolution from the Literature = ",log);
 	snprintf(fdata, 50, "%.1f", res);
 	fputs(fdata,log); perc = ((best-res)*100/best);
-	if(perc != 0){
+	if(perc > 0){
 		printf("Percentual left = %.4f%%\n",perc);
 		fputs("\nPercentual left = ",log);
 		snprintf(fdata, 50, "%.4f", perc);
