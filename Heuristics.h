@@ -291,15 +291,6 @@ float heuristic2(int size, int pos[], int flow[][size],float value[][2],float la
 		}
 		//if a better solution is found
 		if(pospp != t){
-			/*
-			 *	VALUE CHANGER
-			 *	If a lower higher bound is needed, the following command can be excluded
-			 *	In that way, the algorithm won't be stuck with a local minimun
-			 *	But, in the other hand, some performance issues are to be expected
-			 *	Notation:
-			 *	LIMITED: Not allowing the algorithm to move facilities that were already moved
-			 *	UNLIMITED:	Allowing the algorithm to move all facilities
-			 */
 			p = pospp;
 			pp = t;
 			if(mode == 0){
