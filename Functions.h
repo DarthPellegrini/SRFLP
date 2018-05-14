@@ -108,7 +108,7 @@ void execution(int size, int solsize, int pos[][size], int flow[][size], float v
 	best = last = objectiveFunction(size,pos[0],flow,value);
 	for(temp = 1; temp < solsize; temp++){
 		last = hRecursion(size,pos[temp],flow,value,last,heuristic);
-		printf("Multiple Soltions in phase %d with the result %.1f\n", temp, last);
+		printf("Multiple Soltions in iteration %d with the result %.1f\n", temp, last);
 		if (last < best){
 			for(i = 1; i < size; i++)
 				pos[0][i] = pos[temp][i];
